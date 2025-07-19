@@ -1,6 +1,6 @@
-//https://codeforces.com/contest/2126/problem/C
 //2025.7.19 Codeforces Round 1037 (Div. 3)
 
+//https://codeforces.com/contest/2126/problem/C
 #include<iostream>
 #include<vector>
 #include<algorithm>
@@ -30,4 +30,78 @@ int main() {
 	while (t--) {
 		solve();
 	}
+}
+
+//https://codeforces.com/contest/2126/problem/D
+原先思路是存邻接表利用搜索找最大值，可惜超时
+#include<iostream>
+#include<stdio.h>
+#include<vector>
+#include<algorithm>
+using namespace std;
+vector<vector<int>> a(100010);
+int vis[100010];
+int ma = 0;
+void dfs(int x) {
+	if (vis[x])return;
+	vis[x] = 1;
+	ma = ma>x?ma:x;
+	if (a[x].empty()) {
+		ma = ma > x ? ma : x;
+		return;
+	}
+	for (int i = 0; i < a[x].size(); i++) {
+		ma = ma > x ? ma : x;
+		dfs(a[x][i]);
+		ma = ma > x ? ma : x;
+	}
+	return;
+}
+void solve() {
+	int n, k;
+	scanf("%d %d", &n,&k);
+	for (int i = 0; i <= 100000; i++) {
+		a[i].clear();
+		vis[i] = 0;
+	}
+	for (int i = 0; i < n; i++) {
+		int l, r, t;
+		scanf("%d %d %d", &l,&r,&t);
+		for (int j = l; j <= r; j++) {
+			a[j].push_back(t);
+		}
+	}
+	dfs(k);
+	cout << ma << endl;
+	ma = 0;
+	return;
+}
+int main() {
+	int t;
+	scanf("%d", &t);
+	while (t--) {
+		solve();
+	}
+}
+
+题解为贪心
+#include <iostream>
+#include<algorithm>
+using namespace std;
+int main() {
+    int t;
+    cin >> t;
+    while (t--) {
+        int n, k;
+        cin >> n >> k;
+        pair <int, pair <int, int> > p[n + 1];
+        for (int i = 1; i <= n; i++) cin >> p[i].first >> p[i].second.first >> p[i].second.second;
+        sort(p + 1, p + n + 1);
+        int cur = k;
+        for (int i = 1; i <= n; i++) {
+            if (p[i].first > cur) break;
+            cur = cur > p[i].second.second ? cur : p[i].second.second;
+        }
+        cout << cur << endl;
+    }
 }
