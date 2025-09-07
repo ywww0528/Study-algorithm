@@ -1,0 +1,70 @@
+// F
+//先是英文题目不太适应，所以开局花了好久推测题目意思，队友签到题a完了之后才开始慢慢理思路，开始以为是接雨水发现和接雨水不一样，然后开始想是不是求最长上升子段，还是错，就这样一个小时没了
+//然后决定先和队友把a题先a了再说，开始钻a题，wa了好几发
+//最后想到是单调栈，但是如何去实现一直都没有想通，遗憾
+//要多去看数据结构了，听说是笛卡尔树的板子题
+//下午网络赛加油
+
+#include <iostream>
+#include <cstring>
+#include <vector>
+#include <queue>
+#include <stack>
+#include <algorithm>
+using namespace std;
+#define int long long
+int a[200550];
+int dx[] = {0, 0, 1, -1};
+int dy[] = {1, -1, 0, 0};
+int n;
+
+void solve()
+{
+    int n;
+    cin >> n;
+    a[0] = a[n + 1] = 2e9;
+    for (int i = 1; i <= n; i++)
+    {
+        cin >> a[i];
+    }
+    stack<int> stk;
+    stk.push(0);
+    int ans = 0;
+    for (int i = 1; i <= n; i++)
+    {
+        while (!stk.empty() && a[stk.top()] < a[i])
+        {
+            stk.pop();
+        }
+        ans += i - stk.top() - 1;
+        stk.push(i);
+    }
+    while (!stk.empty())
+    {
+        stk.pop();
+    }
+    stk.push(n + 1);
+    for (int i = n; i >= 1; i--)
+    {
+        while (!stk.empty() && a[stk.top()] < a[i])
+        {
+            stk.pop();
+        }
+        if (a[stk.top()] != a[i])
+            ans += stk.top() - i - 1;
+        stk.push(i);
+    }
+    cout << ans << endl;
+}
+
+signed main()
+{
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    cout.tie(nullptr);
+    int T = 1;
+    cin >> T;
+    while (T--)
+        solve();
+    return 0;
+}
